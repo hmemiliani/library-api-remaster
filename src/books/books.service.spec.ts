@@ -6,6 +6,7 @@ import { BooksService } from './books.service';
 import { Book } from './entities/book.entity';
 import { CreateBookDto } from './dto/create-book.dto';
 import { NotFoundException } from '@nestjs/common';
+import { UpdateBookDto } from './dto/update-book.dto';
 
 describe('BooksService', () => {
   let service: BooksService;
@@ -88,6 +89,45 @@ describe('BooksService', () => {
 
     try {
       await service.findOne(1);
+    } catch (error) {
+      expect(error).toBeInstanceOf(NotFoundException);
+      expect(error.message).toBe('Book with ID 1 not found');
+    }
+    expect(repository.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
+  });
+
+  it('should update a book', async () => {
+    const updateBookDto: UpdateBookDto = {
+      title: 'Updated Title',
+    };
+
+    const bookEntity = {
+      id: 1,
+      title: 'Original Title',
+      author: 'Sample Author',
+      publicationDate: '2024-10-06',
+      genre: 'Sample Genre',
+    };
+
+    jest.spyOn(repository, 'findOne').mockResolvedValue(bookEntity as Book);
+    jest
+      .spyOn(repository, 'save')
+      .mockResolvedValue({ ...bookEntity, ...updateBookDto } as Book);
+
+    const result = await service.update(1, updateBookDto);
+    expect(result).toEqual({ ...bookEntity, ...updateBookDto });
+    expect(repository.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
+    expect(repository.save).toHaveBeenCalledWith({
+      ...bookEntity,
+      ...UpdateBookDto,
+    });
+  });
+
+  it('should throw a NotFoundException if book to update is not found', async () => {
+    jest.spyOn(repository, 'findOne').mockResolvedValue(null);
+
+    try {
+      await service.update(1, {});
     } catch (error) {
       expect(error).toBeInstanceOf(NotFoundException);
       expect(error.message).toBe('Book with ID 1 not found');
