@@ -18,7 +18,7 @@ export class BooksService {
   }
 
   async findAll(): Promise<Book[]> {
-    return this.bookRepository.find();
+    return this.bookRepository.find({ where: { isDeleted: false } });
   }
 
   async findOne(id: number): Promise<Book> {
@@ -35,6 +35,16 @@ export class BooksService {
       throw new NotFoundException(`Book with ID ${id} not found`);
     }
     Object.assign(book, updateBookDto);
+    return this.bookRepository.save(book);
+  }
+
+  async remove(id: number): Promise<Book> {
+    const book = await this.bookRepository.findOne({ where: { id } });
+    if (!book) {
+      throw new NotFoundException(`Book with ID ${id} not found`);
+    }
+
+    book.isDeleted = true;
     return this.bookRepository.save(book);
   }
 }
