@@ -170,4 +170,14 @@ describe('BooksService', () => {
     }
     expect(repository.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
   });
+
+  it('should return an empty array if no books are found', async () => {
+    jest.spyOn(repository, 'find').mockResolvedValue([]);
+
+    const result = await service.findAll();
+    expect(result).toEqual([]);
+    expect(repository.find).toHaveBeenCalledWith({
+      where: { isDeleted: false },
+    });
+  });
 });
