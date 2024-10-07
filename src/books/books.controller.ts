@@ -19,26 +19,26 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-@ApiTags('books')
+@ApiTags('Books')
 @Controller('books')
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Crear un nuevo libro' })
+  @ApiOperation({ summary: 'Create a new book' })
   @ApiResponse({
     status: 201,
-    description: 'Libro creado exitosamente.',
+    description: 'The book has been successfully created.',
     type: Book,
   })
-  @ApiResponse({ status: 400, description: 'Datos de entrada inválidos.' })
+  @ApiResponse({ status: 400, description: 'Invalid input data.' })
   async create(@Body() createBookDto: CreateBookDto): Promise<Book> {
     return this.booksService.create(createBookDto);
   }
 
   @Get()
-  @ApiOperation({ summary: 'Obtener la lista de libros' })
-  @ApiResponse({ status: 200, description: 'Lista de libros.', type: [Book] })
+  @ApiOperation({ summary: 'Get a list of all books' })
+  @ApiResponse({ status: 200, description: 'List of books.', type: [Book] })
   async findAll(): Promise<Book[]> {
     return this.booksService.findAll();
   }
@@ -47,7 +47,7 @@ export class BooksController {
   @ApiOperation({ summary: 'Get details of a book by ID' })
   @ApiParam({ name: 'id', description: 'The ID of the book' })
   @ApiResponse({ status: 200, description: 'Book details', type: Book })
-  @ApiResponse({ status: 404, description: 'Book not found' })
+  @ApiResponse({ status: 404, description: 'Book not found.' })
   async findOne(@Param('id') id: number): Promise<Book> {
     return this.booksService.findOne(+id);
   }
@@ -61,7 +61,7 @@ export class BooksController {
     description: 'The book has been successfully updated.',
     type: Book,
   })
-  @ApiResponse({ status: 404, description: 'Book not found' })
+  @ApiResponse({ status: 404, description: 'Book not found.' })
   async update(
     @Param('id') id: number,
     @Body() updateBookDto: UpdateBookDto,
@@ -77,7 +77,7 @@ export class BooksController {
     description: 'The book has been successfully deleted.',
     type: Book,
   })
-  @ApiResponse({ status: 404, description: 'Book not found' })
+  @ApiResponse({ status: 404, description: 'Book not found.' })
   async remove(@Param('id') id: number): Promise<Book> {
     return this.booksService.remove(+id);
   }

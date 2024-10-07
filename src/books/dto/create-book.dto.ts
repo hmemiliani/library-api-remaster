@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsDateString } from 'class-validator';
+import { IsString, IsNotEmpty, IsDateString, IsNumber } from 'class-validator';
 
 export class CreateBookDto {
   @ApiProperty({ description: 'The title of the book' })
@@ -7,18 +7,21 @@ export class CreateBookDto {
   @IsNotEmpty()
   title: string;
 
-  @ApiProperty({ description: 'The author of the book' })
-  @IsString()
+  @ApiProperty({ description: 'The ID of the author' })
+  @IsNumber()
   @IsNotEmpty()
-  author: string;
+  authorId: number;
 
-  @ApiProperty({ description: 'The author of the book' })
+  @ApiProperty({
+    description: 'The publication date of the book',
+    example: '2024-10-06',
+  })
   @IsDateString()
   @IsNotEmpty()
   publicationDate: string;
 
-  @ApiProperty({ description: 'The genre of the book' })
-  @IsString()
+  @ApiProperty({ description: 'The ID of the genre' })
+  @IsNumber()
   @IsNotEmpty()
-  genre: string;
+  genreId: number;
 }

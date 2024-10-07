@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { Author } from '../../authors/entities/author.entity';
+import { Genre } from '../../genres/entities/genre.entity';
 
 @Entity()
 export class Book {
@@ -11,9 +13,9 @@ export class Book {
   @Column()
   title: string;
 
-  @ApiProperty({ description: 'The author of the book' })
-  @Column()
-  author: string;
+  @ApiProperty({ description: 'The authorId of the book' })
+  @ManyToOne(() => Author, (author) => author.books)
+  author: Author;
 
   @ApiProperty({
     description: 'The publication date of the book',
@@ -22,9 +24,9 @@ export class Book {
   @Column()
   publicationDate: string;
 
-  @ApiProperty({ description: 'The genre of the book' })
-  @Column()
-  genre: string;
+  @ApiProperty({ description: 'The genreId of the book' })
+  @ManyToOne(() => Genre, (genre) => genre.books)
+  genre: Genre;
 
   @ApiProperty({
     description: 'Indicates if the book is logically deleted',

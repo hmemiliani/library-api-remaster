@@ -4,6 +4,9 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BooksModule } from './books/books.module';
+import { AuthorsModule } from './authors/authors.module';
+import { GenresModule } from './genres/genres.module';
+import { SeedersModule } from './seeders/seeders.module';
 
 @Module({
   imports: [
@@ -28,6 +31,9 @@ import { BooksModule } from './books/books.module';
       }),
     }),
     BooksModule,
+    AuthorsModule,
+    GenresModule,
+    SeedersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
