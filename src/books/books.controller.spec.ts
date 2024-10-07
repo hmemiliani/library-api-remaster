@@ -34,9 +34,9 @@ describe('BooksController', () => {
   it('should throw an error if createBookDto is invalid', async () => {
     const createBookDto: CreateBookDto = {
       title: '',
-      author: '',
+      authorId: null,
       publicationDate: 'invalid-date',
-      genre: '',
+      genreId: null,
     };
 
     try {
@@ -52,17 +52,23 @@ describe('BooksController', () => {
   });
 
   it('should call BooksService.findOne with correct id', async () => {
-    const bookId = 1;
+    const bookId = 10;
     const result = {
       id: bookId,
       title: 'Test Book',
-      author: 'Author',
       publicationDate: '2024-10-06',
-      genre: 'Fiction',
       isDeleted: false,
+      author: {
+        id: 10,
+        name: 'Author Name',
+      },
+      genre: {
+        id: 10,
+        name: 'Genre Name',
+      },
     };
 
-    jest.spyOn(service, 'findOne').mockResolvedValue(result);
+    jest.spyOn(service, 'findOne').mockResolvedValue(result as Book);
 
     expect(await controller.findOne(bookId)).toEqual(result);
     expect(service.findOne).toHaveBeenCalledWith(bookId);

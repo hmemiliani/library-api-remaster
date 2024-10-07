@@ -38,9 +38,10 @@ export class AuthorsService {
     return this.authorRepository.save(author);
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: number): Promise<Author> {
     const author = await this.findOne(id);
     await this.authorRepository.remove(author);
+    return author;
   }
 
   async findBooksByAuthor(id: number): Promise<any> {
